@@ -2,32 +2,26 @@ package password
 
 import (
 	"crypto/rand"
-	"errors"
 	"math/big"
 	"strings"
 )
 
+// Characters used for password  generation.
 var charset = []rune(
 	"abcdefghijklmnopqrstuvwxyz" +
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 		"!@#$%^&*()-_=+[]{}|\\:;\"'<>,.?/",
 )
 
-func Generate(length int) (string, error) {
-	if length <= 0 {
-		return "", errors.New("password length must be > 0")
-	}
+func Generate(length int) string {
 
 	var b strings.Builder
 	b.Grow(length)
 
 	for i := 0; i < length; i++ {
-		n, err := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
-		if err != nil {
-			return "", err
-		}
+		n, _ := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
 		b.WriteRune(charset[n.Int64()])
 	}
 
-	return b.String(), nil
+	return b.String()
 }
